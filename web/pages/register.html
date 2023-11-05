@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <!--base标签定义页面基地址为localhost:port/工程名/-->
+    <base href="http://localhost:8080/project1/"/>
+    <style>
+        span{
+            color: red;
+        }
+    </style>
+    <script src="../lib/jquery.js"></script>
+    <script>
+        $(function (){
+            // 验证用户名：必须由字母，数字，下划线组成，长度为5-12
+            $("#button").click(function (){
+                var username=$("#account").val()
+                var usernamepattern=/^\w{5,12}$/;
+                if(usernamepattern.test(username)){
+                    $("#wrongaccount").text("")
+
+                }else{
+                    $("#wrongaccount").text("用户账户输入不合法！")
+                    return false
+                }
+            })
+            // 验证密码：必须由字母，数字，下划线组成，长度为5-12
+            $("#button").click(function (){
+                var password=$("#passwd1").val()
+                var passwordpattern=/^\w{5,12}$/;
+                //alert(password)
+                if(passwordpattern.test(password)){
+                    $("#wrongpassword").text("")
+
+                }else{
+                    $("#wrongpassword").text("密码输入不合法！")
+                    return false
+                }
+            })
+            // 验证确认密码： 必须和密码相同
+            $("#button").click(function (){
+                var password=$("#passwd1").val()
+                var passwordconfirm=$("#passwd2").val()
+                if(password == passwordconfirm){
+                    $("#wrongpa").text("")
+                }else{
+                    $("#wrongpa").text("两次密码输入不一致！")
+                    return false
+                }
+            })
+            // 邮箱验证：xxx@xxx.com
+            $("#button").click(function (){
+                var email=$("#email").val()
+                var emailPatta=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if(emailPatta.test(email)){
+                    $("#wrongemail").text("")
+                }else{
+                    $("#wrongemail").text("邮箱输入有误！")
+                    return false
+                }
+            })
+            // 验证码：(暂时不需要)
+
+        })
+    </script>
+</head>
+<body>
+<form action="registerservlet" method="post">
+    登录账号:<input type="text" name="username" id="account" /><span id="wrongaccount"></span>
+    <br />
+    登录密码:<input type="password" name="password1" id="passwd1"/><span id="wrongpassword"></span>
+    <br />
+    确认密码:<input type="password" name="password2" id="passwd2"/><span id="wrongpa"></span>
+    <br />
+    电子邮箱:<input type="text" name="email" id="email"/><span id="wrongemail"></span>
+    <br />
+    验证码:<input type="text" name="code" id="code"><span id="wrongcode"></span><br />
+    <button type="submit" id="button">注册</button>
+</form>
+</body>
+</html>
