@@ -45,5 +45,9 @@ public interface BookDao {
      */
      public Integer queryForPageTotalCount();
 
-     public List<Book> queryForPageItems(int begin,int pageNo);
+     public List<Book> queryForPageItems(int begin,int pageSize);
+     
+    public Integer queryForPageTotalCountByPrice(int min, int max);
+
+    public List<Book> queryForPageItemsByPrice(int begin, int pageSize, int min, int max);
 }

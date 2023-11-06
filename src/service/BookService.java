@@ -46,4 +46,12 @@ public interface BookService {
      * @return
      */
     public Page<Book> page(int pageNo,int pageSize);
+
+    /**
+     * 通过客户端传的价格区间完成对相应page内容的索取
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Page<Book> pageByPrice(int pageNo, int pageSize,int min,int max);
 }

@@ -1,4 +1,4 @@
-<%--
+<%@ page import="org.apache.tomcat.util.compat.Jre21Compat" %><%--
   Created by IntelliJ IDEA.
   User: Huawei
   Date: 2023/11/1
@@ -14,6 +14,8 @@
     <form action="/project1/manager/servlet" method="get">
         <%--通过隐藏域完成servlet区分--%>
         <input type="hidden" name="action" value="${empty requestScope.edit_bookitem ? "add" : "update"}"/>
+        <%--通过隐藏域完成对添加或修改后页面位置的跳转--%>
+        <input type="hidden" name="pageNo" value="${requestScope.pageNo}"/>
         <input type="hidden" name="id" value="${requestScope.edit_bookitem.id}"/>
         <tr>
             <td>

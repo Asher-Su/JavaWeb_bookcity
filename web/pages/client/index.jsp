@@ -1,16 +1,15 @@
-<%@ page import="pojo.Book" %>
-<%@ page import="java.util.List" %><%--
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
   Created by IntelliJ IDEA.
   User: Huawei
-  Date: 2023/11/1
-  Time: 20:28
+  Date: 2023/11/5
+  Time: 21:02
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>manager</title>
+    <title>client_index</title>
     <script src="${pageContext.request.contextPath}/lib/jquery.js"></script>
     <script type="application/javascript">
         $(function (){
@@ -33,104 +32,63 @@
                 function (){
                     // 可以这样写，但是还是会有安全问题，校验过程最好还是放在服务端为好(在服务端page的servlet中进行边界检查)
                     /**
+                     var pageNo = $("#SearchPageNo").val()
+                     var pageSize = ${requestScope.page.pageTotal}
+                     if(pageNo<1 || pageNo>pageSize){
+                     confirm("您输入页码有误请重新输入")
+                     }else{
+                     // 注意location.href可以用来获取访问URL,且href数据可读可写,e.g.:www.baidu.com
+                     location.href = "http://localhost:8080/project1/manager/servlet?action=page&pageNo="+pageNo
+                     }
+                     */
                     var pageNo = $("#SearchPageNo").val()
-                    var pageSize = ${requestScope.page.pageTotal}
-                        if(pageNo<1 || pageNo>pageSize){
-                            confirm("您输入页码有误请重新输入")
-                        }else{
-                        // 注意location.href可以用来获取访问URL,且href数据可读可写,e.g.:www.baidu.com
-                            location.href = "http://localhost:8080/project1/manager/servlet?action=page&pageNo="+pageNo
-                        }
-                   */
-                    var pageNo = $("#SearchPageNo").val()
-                    location.href = "http://localhost:8080/project1/manager/servlet?action=page&pageNo="+pageNo
+                    location.href = "http://localhost:8080/project1/client/servlet?action=page&pageNo="+pageNo
                 }
             )
         })
     </script>
 </head>
 <body>
-    <%
-        List<Book> bookList = (List<Book>) request.getAttribute("page_list");
-        for(Book book: bookList){
-    %>
-    <table>
-        <th>图书列表</th>
-        <tr>
-            <td>
-                ID:
-            </td>
-            <td>
-                Name:
-            </td>
-            <td>
-                Author:
-            </td>
-            <td>
-                Price:
-            </td>
-            <td>
-                Sales:
-            </td>
-            <td>
-                Stock:
-            </td>
-            <td>
-                ImgPath:
-            </td>
-            <td>
-                功能1:
-            </td>
-            <td>
-                功能2:
-            </td>
-        </tr>
-        </tr>
-        <tr>
-            <td>
-                <%= book.getId() %>
-            </td>
-            <td>
-                <%= book.getName() %>
-            </td>
-            <td>
-                <%= book.getAuthor() %>
-            </td>
-            <td>
-                <%= book.getPrice() %>
-            </td>
-            <td>
-                <%= book.getSales() %>
-            </td>
-            <td>
-                <%= book.getStock() %>
-            </td>
-            <td>
-                <%= book.getImgPath() %>
-            </td>
-            <td>
-                <a href="/project1/manager/servlet?action=getBook&id=<%=book.getId()%>&pageNo=${requestScope.page.pageNo}">修改</a>
-            </td>
-            <td>
-                <a class="DeleteConfirm" href="/project1/manager/servlet?action=delete&id=<%=book.getId()%>&pageNo=${requestScope.page.pageNo}">删除</a>
-            </td>
-        </tr>
-    <%
-        }
-    %>
-        <tr>
-            <td>
-                <a href="/project1/pages/manager/manager_edit.jsp">添加图书</a>
-            </td>
-        </tr>
-    </table>
-
+    <div>
+        <form action="/project1/client/servlet" method="get">
+            <input type="hidden" name="action" value="pageByPrice">
+            <%--通过请求中的min和max完成对价格的回显操作--%>
+            价格：<input id="min" type="text" name="min" value="${param.min}">元
+            <input id="max" type="text" name="max" value="${param.max}">元
+            <input type="submit" value="查询">
+        </form>
+    </div>
+    <c:forEach items="${requestScope.page.items}" var="i">
+        <div>
+            <div>
+                <span>书名：</span>
+                <span>${i.name}</span>
+            </div>
+            <div>
+                <span>作者：</span>
+                <span>${i.author}</span>
+            </div>
+            <div>
+                <span>价格：</span>
+                <span>${i.price}</span>
+            </div>
+            <div>
+                <span>销量：</span>
+                <span>${i.sales}</span>
+            </div>
+            <div>
+                <span>库存：</span>
+                <span>${i.stock}</span>
+            </div>
+        </div>
+        <br/>
+    </c:forEach>
     <%--分页标签--%>
     <div>
-        <a href="/project1/manager/servlet?action=page&pageNo=1">首页</a>
+        <a href="/project1/client/servlet?action=pageByPrice&pageNo=1&min=${requestScope.min}&max=${requestScope.max}">首页</a>
         <%--判断分页是否为第一页,进行效果操作--%>
         <c:if test = "${requestScope.page.pageNo > 1 }">
-            <a href="/project1/manager/servlet?action=page&pageNo=${requestScope.page.pageNo - 1}">上一页</a>
+            <a href="/project1/client/servlet?action=pageByPrice&pageNo=${requestScope.page.pageNo - 1}&min=${requestScope.min}&max=${requestScope.max}">上一页</a>
         </c:if>
         <%--目录的整体效果--%>
         <c:if test="${requestScope.page.pageTotal <= 5}">
@@ -139,7 +97,7 @@
                     【${i}】
                 </c:if>
                 <c:if test="${requestScope.page.pageNo != i}">
-                    <a href="/project1/manager/servlet?action=page&pageNo=${i}">${i}</a>
+                    <a href="/project1/client/servlet?action=pageByPrice&pageNo=${i}&min=${requestScope.min}&max=${requestScope.max}">${i}</a>
                 </c:if>
             </c:forEach>
         </c:if>
@@ -150,7 +108,7 @@
                         【${i}】
                     </c:if>
                     <c:if test="${requestScope.page.pageNo != i}">
-                        <a href="/project1/manager/servlet?action=page&pageNo=${i}">${i}</a>
+                        <a href="/project1/client/servlet?action=pageByPrice&pageNo=${i}&min=${requestScope.min}&max=${requestScope.max}">${i}</a>
                     </c:if>
                 </c:forEach>
             </c:if>
@@ -160,7 +118,7 @@
                         【${i}】
                     </c:if>
                     <c:if test="${requestScope.page.pageNo != i}">
-                        <a href="/project1/manager/servlet?action=page&pageNo=${i}">${i}</a>
+                        <a href="/project1/client/servlet?action=pageByPrice&pageNo=${i}&min=${requestScope.min}&max=${requestScope.max}">${i}</a>
                     </c:if>
                 </c:forEach>
             </c:if>
@@ -170,16 +128,16 @@
                         【${i}】
                     </c:if>
                     <c:if test="${requestScope.page.pageNo != i}">
-                        <a href="/project1/manager/servlet?action=page&pageNo=${i}">${i}</a>
+                        <a href="/project1/client/servlet?action=pageByPrice&pageNo=${i}&min=${requestScope.min}&max=${requestScope.max}">${i}</a>
                     </c:if>
                 </c:forEach>
             </c:if>
         </c:if>
         <%--判断分页是否为尾页，进行效果操作--%>
         <c:if test="${requestScope.page.pageNo < requestScope.page.pageTotal}">
-            <a href="/project1/manager/servlet?action=page&pageNo=${requestScope.page.pageNo + 1}">下一页</a>
+            <a href="/project1/client/servlet?action=pageByPrice&pageNo=${requestScope.page.pageNo + 1}&min=${requestScope.min}&max=${requestScope.max}">下一页</a>
         </c:if>
-        <a href="/project1/manager/servlet?action=page&pageNo=${requestScope.page.pageTotal}">尾页</a>
+        <a href="/project1/client/servlet?action=pageByPrice&pageNo=${requestScope.page.pageTotal}&min=${requestScope.min}&max=${requestScope.max}">尾页</a>
         共${requestScope.page.pageTotal}页,${requestScope.page.pageTotalCount}条记录
         到第<input id="SearchPageNo"/>页
         <input id="SearchPageConfirm" type="button" value="确认">

@@ -46,4 +46,10 @@ public class BookServiceImplTest {
         Page<Book> page = bookServiceimpl.page(1, 4);
         System.out.println(page.getItems());
     }
+
+    @Test
+    public void pageByPrice(){
+        Page<Book> bookPage = bookServiceimpl.pageByPrice(1, 2, 6, 50);
+        System.out.println(bookPage.getItems());
+    }
 }

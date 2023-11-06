@@ -49,30 +49,36 @@ public class BookServlet extends BaseServlet {
     }
 
     protected void add(HttpServletRequest req,HttpServletResponse resp) throws SQLException, ServletException, IOException {
+        int pageNo = Integer.parseInt(req.getParameter("pageNo"));
+        pageNo++; //这个不太理解
         Book book =new Book(null,req.getParameter("name"),req.getParameter("author"),
                 new BigDecimal(req.getParameter("price")),Integer.parseInt(req.getParameter("sales")),
                 Integer.parseInt(req.getParameter("stock")),null);
         bookServiceimpl.addBook(book);
 //        注意这段代码采用了一次request请求的过程完成了需求，但这也会导致客户在浏览器刷新时，重新提交table重新发送请求，注意这里要用请求重定向发两次request
 //        req.getRequestDispatcher("/manager/servlet?action=list").forward(req,resp);
-        resp.sendRedirect(req.getContextPath()+"/manager/servlet?action=list");
+        resp.sendRedirect(req.getContextPath()+"/manager/servlet?action=page&pageNo="+pageNo);
     }
     protected void delete(HttpServletRequest req,HttpServletResponse resp) throws SQLException, IOException {
+        int pageNo = Integer.parseInt(req.getParameter("pageNo"));
         String id = req.getParameter("id");
         bookServiceimpl.deleteBookById(Integer.parseInt(id));
-        resp.sendRedirect(req.getContextPath()+"/manager/servlet?action=list");
+        resp.sendRedirect(req.getContextPath()+"/manager/servlet?action=page&pageNo="+pageNo);
     }
     protected void update(HttpServletRequest req,HttpServletResponse resp) throws IOException {
+        int pageNo = Integer.parseInt(req.getParameter("pageNo"));
         Book book =new Book(Integer.parseInt(req.getParameter("id")),req.getParameter("name"),req.getParameter("author"),
                 new BigDecimal(req.getParameter("price")),Integer.parseInt(req.getParameter("sales")),
                 Integer.parseInt(req.getParameter("stock")),null);
         bookServiceimpl.updateBook(book);
-        resp.sendRedirect(req.getContextPath()+"/manager/servlet?action=list");
+        resp.sendRedirect(req.getContextPath()+"/manager/servlet?action=page&pageNo="+pageNo);
     }
     protected void getBook(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
+        int pageNo = Integer.parseInt(req.getParameter("pageNo"));
         String id = req.getParameter("id");
         Book book = bookServiceimpl.queryBookById(Integer.parseInt(id));
         req.setAttribute("edit_bookitem",book);
-        req.getRequestDispatcher("/pages/manager/manager_edit.jsp").forward(req,resp);
+        req.setAttribute("pageNo",pageNo);
+        req.getRequestDispatcher("/pages/manager/manager_edit.jsp?pageNo="+pageNo).forward(req,resp);
     }
 }
