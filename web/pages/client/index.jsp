@@ -45,10 +45,30 @@
                     location.href = "http://localhost:8080/project1/client/servlet?action=page&pageNo="+pageNo
                 }
             )
+
+            // 完成对点击添加到购物车按钮后的结果
+            $(function (){
+                $("button.addToCart").click(function (){
+                    // 从DOM中被调用元素中获取其自定义属性"bookId"
+                    var bookId = $(this).attr("bookId");
+                    // 通过location.href来完成对指定的URL地址发包
+                    location.href = "http://localhost:8080/project1/cartServlet?action=addCartItem&bookid="+bookId
+                })
+            })
         })
     </script>
 </head>
 <body>
+    <div>
+        <%--如果sessionScope中没有user元素，意味着用户尚且没有登录--%>
+        <c:if test="${ empty sessionScope.user}">
+            <a href="pages/login.html">登录</a>
+        </c:if>
+        <c:if test="${ not empty sessionScope.user}">
+            <h2>欢迎${sessionScope.user}!</h2>
+            <a href="loginservlet?action=logout">注销</a>
+        </c:if>
+    </div>
     <div>
         <form action="/project1/client/servlet" method="get">
             <input type="hidden" name="action" value="pageByPrice">
@@ -79,6 +99,10 @@
             <div>
                 <span>库存：</span>
                 <span>${i.stock}</span>
+            </div>
+            <div>
+            <%--通过自定义属性bookId完成对遍历的图书的id值得选取--%>
+                <button bookId="${i.id}" class="addToCart">加入购物车</button>
             </div>
         </div>
         <br/>

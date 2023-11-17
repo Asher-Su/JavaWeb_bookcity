@@ -50,7 +50,7 @@ public class BookServlet extends BaseServlet {
 
     protected void add(HttpServletRequest req,HttpServletResponse resp) throws SQLException, ServletException, IOException {
         int pageNo = Integer.parseInt(req.getParameter("pageNo"));
-        pageNo++; //这个不太理解
+        pageNo++;
         Book book =new Book(null,req.getParameter("name"),req.getParameter("author"),
                 new BigDecimal(req.getParameter("price")),Integer.parseInt(req.getParameter("sales")),
                 Integer.parseInt(req.getParameter("stock")),null);
