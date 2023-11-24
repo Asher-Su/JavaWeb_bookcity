@@ -43,4 +43,50 @@
         <servlet-name>CartServlet</servlet-name>
         <url-pattern>/cartServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>orderServlet</servlet-name>
+        <servlet-class>web.OrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>orderServlet</servlet-name>
+        <url-pattern>/orderServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ajaxServlet</servlet-name>
+        <servlet-class>web.ajaxServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ajaxServlet</servlet-name>
+        <url-pattern>/ajaxServlet</url-pattern>
+    </servlet-mapping>
+    <filter>
+        <filter-name>managerFilter</filter-name>
+        <filter-class>filter.ManagerFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>managerFilter</filter-name>
+        <url-pattern>/pages/manager/*</url-pattern>
+        <!--注意可以同一个filter对应多个限制的url-pattern-->
+        <url-pattern>/manager/BookServlet</url-pattern>
+    </filter-mapping>
+    <!--设置TransactionFilter将所有想要访问资源的业务进行try-catch处理，代码出错进行回滚操作-->
+    <filter>
+        <filter-name>TransactionFilter</filter-name>
+        <filter-class>filter.TransactionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>TransactionFilter</filter-name>
+         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--error-page标签用于当出错时页面跳转的位置以及跳转报错的error-code-->
+    <!--当服务器报错500时跳转到对应location目录中-->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/pages/error/error500.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/pages/error/error404.jsp</location>
+    </error-page>
 </web-app>

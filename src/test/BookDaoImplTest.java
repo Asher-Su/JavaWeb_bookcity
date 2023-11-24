@@ -8,8 +8,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class BookDaoImplTest {
 
     BookDaoImpl bookdaoimpl= new BookDaoImpl();
@@ -64,4 +62,5 @@ public class BookDaoImplTest {
         List<Book> bookList = bookdaoimpl.queryForPageItemsByPrice(0, 1, 11, 50);
         System.out.println(bookList);
     }
+
 }

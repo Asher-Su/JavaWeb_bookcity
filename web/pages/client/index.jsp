@@ -55,6 +55,12 @@
                     location.href = "http://localhost:8080/project1/cartServlet?action=addCartItem&bookid="+bookId
                 })
             })
+
+            // 完成单机购物车按钮之后转到购物车
+            // 同时由于上一步添加的图书数据存储在session域中的cart因此在cart.jsp中打印即可
+            $("#cart").click(function (){
+                location.href = "http://localhost:8080/project1/pages/cart/cart.jsp"
+            })
         })
     </script>
 </head>
@@ -68,6 +74,24 @@
             <h2>欢迎${sessionScope.user}!</h2>
             <a href="loginservlet?action=logout">注销</a>
         </c:if>
+    </div>
+    <div>
+        <button id="cart">购物车</button>
+    </div>
+    <div>
+        <div>
+            <c:if test="${not empty sessionScope.cart}">
+                您的购物车有${sessionScope.cart.totalCount}个商品
+            </c:if>
+            <c:if test="${empty sessionScope.cart}">
+                您的购物车有0个商品
+            </c:if>
+        </div>
+        <div>
+            <c:if test="${not empty sessionScope.new_add_name}">
+                您最新添加的商品名称为《${sessionScope.new_add_name}》
+            </c:if>
+        </div>
     </div>
     <div>
         <form action="/project1/client/servlet" method="get">

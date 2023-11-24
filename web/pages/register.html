@@ -10,7 +10,7 @@
             color: red;
         }
     </style>
-    <script src="../lib/jquery.js"></script>
+    <script src="http://localhost:8080/project1/lib/jquery.js"></script>
     <script>
         $(function (){
             // 验证用户名：必须由字母，数字，下划线组成，长度为5-12
@@ -24,6 +24,14 @@
                     $("#wrongaccount").text("用户账户输入不合法！")
                     return false
                 }
+            })
+                // AJAX验证用户名是否存在 blur函数失去焦点后调用
+            $("#account").blur(function (){
+                $.getJSON("http://localhost:8080/project1/ajaxServlet","action=ajaxExistsUsername&username="+this.value,function (data){
+                    if (data){
+                        $("#wrongaccount").text("用户名已存在")
+                    }
+                })
             })
             // 验证密码：必须由字母，数字，下划线组成，长度为5-12
             $("#button").click(function (){

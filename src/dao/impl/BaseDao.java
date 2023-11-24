@@ -26,12 +26,8 @@ public abstract class BaseDao {
             conn = JdbcUtils.getConnection();
             return queryRunner.update(conn,sql,args);
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            // 通过JdbcUtils.close函数完成对连接的关闭
-            JdbcUtils.close(conn);
+            throw new RuntimeException(e); // ！！！！注意这里一定要throw出去，因为不throw出去之前servlet中的函数无法正确catch该Exception
         }
-        return -1;
     }
 
     /**
@@ -49,8 +45,6 @@ public abstract class BaseDao {
             return queryRunner.query(conn,sql,new BeanHandler<T>(type),args);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            JdbcUtils.close(conn);
         }
     }
 
@@ -69,8 +63,6 @@ public abstract class BaseDao {
             return queryRunner.query(conn,sql,new BeanListHandler<T>(type),args);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            JdbcUtils.close(conn);
         }
     }
 
@@ -87,8 +79,6 @@ public abstract class BaseDao {
             return queryRunner.query(conn, sql, new ScalarHandler<>(),args);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            JdbcUtils.close(conn);
         }
     }
 }
